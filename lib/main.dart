@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'Character.dart' as acharacter;
+import 'Planet.dart' as aplanet;
 
 void main() {
   runApp(MyApp());
@@ -11,15 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Star Wars Characters',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -30,14 +26,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -48,11 +36,62 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //int _counter = 0;
 
-  void _getCharacter() {
-    setState(() {
 
+
+
+
+//get the character
+  acharacter.Character _character;
+  acharacter.Properties _characterProps;
+
+  Future<acharacter.Character> _getCharacter() async {
+    Uri url = Uri.parse('https://www.swapi.tech/api/people/1');
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+       _character = acharacter.characterFromJson(response.body);
+      return _character;
+    } else {
+      print("HTTP Error with code ${response.statusCode}");
+      return _character;
+    }
+  }
+
+
+  //get the planet
+
+  aplanet.Planet _planet;
+  aplanet.Properties _planetProps;
+
+  Future<aplanet.Planet> _getPlanet() async {
+    Uri url = Uri.parse(_characterProps.homeworld);
+    http.Response response = await http.get(url);
+    if (response.statusCode == 200) {
+      _planet = aplanet.planetFromJson(response.body);
+      return _planet;
+    } else {
+      print("HTTP Error with code ${response.statusCode}");
+      return _planet;
+    }
+  }
+
+  @override
+  initState()  {
+    super.initState();
+    _getCharacter().then((newCharacter) {
+      setState(() {
+        _character = newCharacter;
+        _characterProps = _character.result.properties;
+      });
+    });
+
+    _getPlanet().then((newPlanet) {
+      setState(() {
+        _planet = newPlanet;
+        _planetProps = _planet.result.properties;
+      });
     });
   }
+
 
   final searchTextField = TextEditingController();
 
@@ -71,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Luke Skywalker',
+              _characterProps.name,
               style: Theme.of(context).textTheme.headline4,
             ),
             FittedBox(
@@ -86,19 +125,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
             Text(
-              'Height: 172',
+              'Height: ' + _characterProps.height,
             ),
             Text(
-              'Skin Color: fair',
+              'Skin Color: ' + _characterProps.skinColor,
             ),
             Text(
-              'Eye Color: blue',
+              'Eye Color: ' + _characterProps.eyeColor,
             ),
             Text(
-              'Hair Color: blond',
+              'Hair Color: ' + _characterProps.hairColor,
             ),
             Text(
-              'Birth Planet: Tatooine',
+              'Birth Planet: ' + _characterProps.name,
             ),
 
 
