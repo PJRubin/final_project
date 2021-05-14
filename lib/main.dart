@@ -127,6 +127,17 @@ class _MyHomePageState extends State<MyHomePage> {
   final searchTextField = TextEditingController();
   String _person;
 
+  String _netImage = "https://media.contentapi.ea.com/content/dam/star-wars-battlefront-2/images/2019/08/swbf2-refresh-hero-large-heroes-page-luke-skywalker-16x9-xl.jpg.adapt.crop1x1.320w.jpg";
+
+   _setImage()
+  {
+    setState(() {
+        return _netImage;
+    });
+
+
+  }
+
 
 
   @override
@@ -151,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child:Image(
               width:200,
                 height:300,
-                image: NetworkImage('https://media.contentapi.ea.com/content/dam/star-wars-battlefront-2/images/2019/08/swbf2-refresh-hero-large-heroes-page-luke-skywalker-16x9-xl.jpg.adapt.crop1x1.320w.jpg')
+                image: NetworkImage(_netImage)
 
             ),
 
@@ -159,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
             Text(
-              'Height: ' + _height,
+              'Height: ' + _height + " cm",
             ),
             Text(
               'Skin Color: ' + _skincolor,
@@ -176,6 +187,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
             Expanded(child: Container()),
+
+            RaisedButton(
+              child: Text('See Options'),
+              onPressed: () {
+                showAlertDialog(context);
+              },
+            ),
 
             TextField(
               decoration: InputDecoration(
@@ -200,32 +218,46 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String _lookForPerson(String person) {
     String test = person.toUpperCase();
-    if(test == ("LUKE SKYWALKER"))
+    if("LUKE SKYWALKER".contains(test))
      {
-        return "https://www.swapi.tech/api/people/1";
+       _netImage = "https://media.contentapi.ea.com/content/dam/star-wars-battlefront-2/images/2019/08/swbf2-refresh-hero-large-heroes-page-luke-skywalker-16x9-xl.jpg.adapt.crop1x1.320w.jpg";
+       _setImage();
+       return "https://www.swapi.tech/api/people/1";
       }
-    else if(test.toString() == ("c-3po"))
+    else if("C-3PO".contains(test))
       {
+        _netImage = "https://i.ebayimg.com/images/g/lfoAAOSwNMZeRXEB/s-l640.jpg";
+        _setImage();
         return "https://www.swapi.tech/api/people/2";
       }
-    else if(test.toString() == ("r2-d2"))
+    else if("R2-D2".contains(test))
     {
+      _netImage = "https://images-na.ssl-images-amazon.com/images/I/61srwGulapL._AC_SX522_.jpg";
+      _setImage();
       return "https://www.swapi.tech/api/people/3";
     }
-    else if(test.toString() == ("DARTH VADER"))
+    else if("DARTH VADER".contains(test))
     {
+      _netImage = "https://s7.orientaltrading.com/is/image/OrientalTrading/VIEWER_ZOOM/darth-vader-cardboard-stand-up~13577316";
+       _setImage();
       return "https://www.swapi.tech/api/people/4";
     }
-    else if(test.toString() == "LEIA ORGANA")
+    else if("LEIA ORGANA".contains(test))
     {
+      _netImage = "https://static.wikia.nocookie.net/fictupedia/images/1/1d/Leia-princess-leia-organa-solo-skywalker-9301321-576-1010.jpg/revision/latest/scale-to-width-down/576?cb=20170120065805";
+      _setImage();
       return "https://www.swapi.tech/api/people/5";
     }
-    else if(test.toString() == "OBI-WAN KENOBI")
+    else if("OBI-WAN KENOBI".contains(test))
     {
+      _netImage = "https://static2.cbrimages.com/wordpress/wp-content/uploads/2018/06/ewan-mcgregor-obi-wan-kenobi-header.jpg";
+      _setImage();
       return "https://www.swapi.tech/api/people/10";
     }
-    else if(test.toString() == "ANAKIN SKYWALKER")
+    else if("ANAKIN SKYWALKER".contains(test))
     {
+      _netImage = "https://static.wikia.nocookie.net/starwars/images/6/6f/Anakin_Skywalker_RotS.png/revision/latest?cb=20130621175844";
+      _setImage();
       return "https://www.swapi.tech/api/people/11";
     }
     else if("".contains(test))
@@ -238,7 +270,40 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     else
       {
+        _netImage = "https://media.contentapi.ea.com/content/dam/star-wars-battlefront-2/images/2019/08/swbf2-refresh-hero-large-heroes-page-luke-skywalker-16x9-xl.jpg.adapt.crop1x1.320w.jpg";
+        _setImage();
         return "https://www.swapi.tech/api/people/1";
       }
   }
+
+  //code from https://www.javatpoint.com/flutter-alert-dialogs
+
+  showAlertDialog(BuildContext context) {
+    // Create button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // Create AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Characters"),
+      content: Text(" Luke Skywalker \n c-3po \n r2-d2 \n Darth Vader \n Leia organa \n Obi-wan Kenobi \n Anakin Skywalker"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
+
+
