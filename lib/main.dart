@@ -42,13 +42,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
 //get the character
   acharacter.Character _character;
-  acharacter.Properties _characterProps;
+
 
   Future<acharacter.Character> _getCharacter() async {
-    Uri url = Uri.parse('https://www.swapi.tech/api/people/1');
+
+    _person = searchTextField.text;
+    String ur = _lookForPerson(_person);
+
+    Uri url = Uri.parse(ur);
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
+
+      setState(() {
        _character = acharacter.characterFromJson(response.body);
+       acharacter.Properties _characterProps = _character.result.properties;
+       _height = _characterProps.height;
+       _name = _characterProps.name;
+       _skincolor = _characterProps.skinColor;
+       _haircolor = _characterProps.hairColor;
+       _eyecolor = _characterProps.eyeColor;
+       _homeworld = _characterProps.homeworld;
+      });
       return _character;
     } else {
       print("HTTP Error with code ${response.statusCode}");
@@ -63,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   aplanet.Properties _planetProps;
 
   Future<aplanet.Planet> _getPlanet() async {
-    Uri url = Uri.parse(_characterProps.homeworld);
+    Uri url = Uri.parse(_homeworld);
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       _planet = aplanet.planetFromJson(response.body);
@@ -80,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _getCharacter().then((newCharacter) {
       setState(() {
         _character = newCharacter;
-        _characterProps = _character.result.properties;
+
+
       });
     });
 
@@ -92,8 +107,18 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  String _height;
+  String _name;
+  String _skincolor;
+  String _haircolor;
+  String _eyecolor;
+  String _homeworld;
+
 
   final searchTextField = TextEditingController();
+  String _person;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              _characterProps.name,
+              _name,
               style: Theme.of(context).textTheme.headline4,
             ),
             FittedBox(
@@ -125,19 +150,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
             Text(
-              'Height: ' + _characterProps.height,
+              'Height: ' + _height,
             ),
             Text(
-              'Skin Color: ' + _characterProps.skinColor,
+              'Skin Color: ' + _skincolor,
             ),
             Text(
-              'Eye Color: ' + _characterProps.eyeColor,
+              'Eye Color: ' + _eyecolor,
             ),
             Text(
-              'Hair Color: ' + _characterProps.hairColor,
+              'Hair Color: ' + _haircolor,
             ),
             Text(
-              'Birth Planet: ' + _characterProps.name,
+              'Birth Planet: ' + _name,
             ),
 
 
@@ -162,5 +187,49 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.search),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  String _lookForPerson(String person) {
+    String test = person.toUpperCase();
+    if(test == ("LUKE SKYWALKER"))
+     {
+        return "https://www.swapi.tech/api/people/1";
+      }
+    else if(test.toString() == ("c-3po"))
+      {
+        return "https://www.swapi.tech/api/people/2";
+      }
+    else if(test.toString() == ("r2-d2"))
+    {
+      return "https://www.swapi.tech/api/people/3";
+    }
+    else if(test.toString() == ("DARTH VADER"))
+    {
+      return "https://www.swapi.tech/api/people/4";
+    }
+    else if(test.toString() == "LEIA ORGANA")
+    {
+      return "https://www.swapi.tech/api/people/5";
+    }
+    else if(test.toString() == "OBI-WAN KENOBI")
+    {
+      return "https://www.swapi.tech/api/people/10";
+    }
+    else if(test.toString() == "ANAKIN SKYWALKER")
+    {
+      return "https://www.swapi.tech/api/people/11";
+    }
+    else if("".contains(test))
+    {
+      return "https://www.swapi.tech/api/people/1";
+    }
+    else if("".contains(test))
+    {
+      return "https://www.swapi.tech/api/people/1";
+    }
+    else
+      {
+        return "https://www.swapi.tech/api/people/1";
+      }
   }
 }
