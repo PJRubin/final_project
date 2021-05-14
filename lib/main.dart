@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Star Wars App'),
     );
   }
 }
@@ -63,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
        _eyecolor = _characterProps.eyeColor;
        _homeworld = _characterProps.homeworld;
       });
+      _getPlanet();
       return _character;
     } else {
       print("HTTP Error with code ${response.statusCode}");
@@ -74,13 +75,21 @@ class _MyHomePageState extends State<MyHomePage> {
   //get the planet
 
   aplanet.Planet _planet;
-  aplanet.Properties _planetProps;
+ String _charhomeworld = "Tatooine";
+
 
   Future<aplanet.Planet> _getPlanet() async {
     Uri url = Uri.parse(_homeworld);
     http.Response response = await http.get(url);
     if (response.statusCode == 200) {
       _planet = aplanet.planetFromJson(response.body);
+
+      aplanet.Properties _planetProps = _planet.result.properties;
+      setState(() {
+
+      _charhomeworld = _planetProps.name;
+      });
+
       return _planet;
     } else {
       print("HTTP Error with code ${response.statusCode}");
@@ -102,17 +111,17 @@ class _MyHomePageState extends State<MyHomePage> {
     _getPlanet().then((newPlanet) {
       setState(() {
         _planet = newPlanet;
-        _planetProps = _planet.result.properties;
+
       });
     });
   }
 
-  String _height;
-  String _name;
-  String _skincolor;
-  String _haircolor;
-  String _eyecolor;
-  String _homeworld;
+  String _height = "";
+  String _name = "";
+  String _skincolor = "";
+  String _haircolor = "";
+  String _eyecolor = "";
+  String _homeworld = "";
 
 
   final searchTextField = TextEditingController();
@@ -162,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'Hair Color: ' + _haircolor,
             ),
             Text(
-              'Birth Planet: ' + _name,
+              'Birth Planet: ' + _charhomeworld,
             ),
 
 
