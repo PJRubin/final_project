@@ -260,14 +260,24 @@ class _MyHomePageState extends State<MyHomePage> {
       _setImage();
       return "https://www.swapi.tech/api/people/11";
     }
-    else if("".contains(test))
+    else if("CHEWBACCA".contains(test))
     {
+      _netImage = "https://starwarsblog.starwars.com/wp-content/uploads/2018/06/chewbacca-solo-tall.jpg";
+      _setImage();
+      return "https://www.swapi.tech/api/people/13";
+    }
+    else if("HAN SOLO".contains(test))
+    {
+      _netImage = "https://lumiere-a.akamaihd.net/v1/images/han-solo-main_a4c8ff79.jpeg?region=0%2C0%2C1920%2C960";
+      _setImage();
       return "https://www.swapi.tech/api/people/1";
     }
-    else if("".contains(test))
-    {
-      return "https://www.swapi.tech/api/people/1";
-    }
+    else if("YODA".contains(test))
+      {
+        _netImage = "https://static.wikia.nocookie.net/starwars/images/d/d6/Yoda_SWSB.png/revision/latest?cb=20150206140125";
+        _setImage();
+        return "https://www.swapi.tech/api/people/20";
+      }
     else
       {
         _netImage = "https://media.contentapi.ea.com/content/dam/star-wars-battlefront-2/images/2019/08/swbf2-refresh-hero-large-heroes-page-luke-skywalker-16x9-xl.jpg.adapt.crop1x1.320w.jpg";
@@ -290,7 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Characters"),
-      content: Text(" Luke Skywalker \n c-3po \n r2-d2 \n Darth Vader \n Leia organa \n Obi-wan Kenobi \n Anakin Skywalker"),
+      content: Text(" Luke Skywalker \n c-3po \n r2-d2 \n Darth Vader \n Leia organa \n Obi-wan Kenobi \n Anakin Skywalker \n Chewbacca \n Han Solo \n Yoda"),
       actions: [
         okButton,
       ],
